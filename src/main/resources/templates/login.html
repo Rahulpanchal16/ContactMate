@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="UTF-8" />
+<title>Custom Login Page</title>
+</head>
+<body>
+	<section>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+
+					<div class="my-card mt-3">
+
+						<form method="post" th:action="@{/dologin}">
+							<h1 class="text-center mb-5">Login</h1>
+							<div th:if="${param.error}" class="alert alert-danger">Invalid
+								username or password</div>
+							<div th:if="${param.logout}" class="alert alert-success">You
+								have been logged out</div>
+							<div class="mb-3">
+								<input type="email" class="form-control" id="exampleInputEmail1"
+									aria-describedby="emailHelp"
+									placeholder="Email or phone number" name="username">
+
+							</div>
+							<div class="mb-3">
+
+								<input type="password" class="form-control"
+									id="exampleInputPassword1" placeholder="Password"
+									name="password">
+							</div>
+							<div class="mb-3 form-check">
+								<input type="checkbox" class="form-check-input"
+									id="exampleCheck1"> <label class="form-check-label"
+									for="exampleCheck1">Remember me</label>
+								<div class="text-end">
+									<a href="" th:href="@{/signup}" style="text-decoration: none">Register
+										here</a>
+								</div>
+							</div>
+
+							<div class="text-center">
+								<button type="submit" class="btn bg-primary"
+									style="color: white">Login</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+</body>
+</html>

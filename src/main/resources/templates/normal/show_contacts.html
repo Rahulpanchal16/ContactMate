@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{normal/base::layout(~{::section})}">
+<head>
+<meta charset="UTF-8" />
+<title>Contacts</title>
+</head>
+<body>
+	<section>
+		<div class="card" style="margin-right: 25px; margin-left: 10px">
+			<div class="card-body">
+				<h1 class="text-center">Your Contacts</h1>
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">First Name</th>
+							<th scope="col">Last Name</th>
+							<th scope="col">Phone Number</th>
+							<th scope="col">Email</th>
+							<th scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="c: ${contacts}">
+							<th scope="row" th:text="${c.c_id}">1</th>
+							<td > 
+							<img src="" class="my_profile_pic" th:src="@{'/img/'+${c.image}}" alt="profile photo" />
+							 <span  th:text="${c.c_name}"></span></td>
+							<td th:text="${c.secondName}">Otto</td>
+							<td th:text="${'+91 '+c.phone}">@mdo</td>
+							<td>
+							<a href="" th:href="@{'/user/'+${c.c_id }+'/contact'}">
+							<span th:text="${c.email}"></span>
+							</a>
+							</td>
+							<td><a href=""><i class="fa-regular fa-pen-to-square"></i></a>
+								<a href=""><i class="fa-solid fa-trash"></i></a></td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- Pagination part -->
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<li th:if="${currentPage !=0}" class="page-item">
+						<a th:href="@{'/user/show-contacts/'+${currentPage-1}}" class="page-link" href="#">Previous</a></li>
+						<li th:classappend="${currentPage==i-1?'active':''}"
+							th:each="i:${#numbers.sequence(1,totalPages)}" class="page-item">
+							<a th:href="@{'/user/show-contacts/'+${i-1}}" class="page-link"	href="#">
+							<span th:text="${i}"></span></a>
+						</li>
+						<li th:if="${currentPage+1 != totalPages}" class="page-item">
+						<a th:href="@{'/user/show-contacts/'+${currentPage+1}}" class="page-link" href="#">Next</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+	</section>
+</body>
+</html>
