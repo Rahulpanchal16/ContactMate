@@ -136,11 +136,11 @@ public class UserController {
 		String userName = principal.getName();
 		User userByUserName = this.repo.getUserByUserName(userName);
 		
-//		if(userByUserName.getId()==contact.getUser().getId()) {
-//			model.addAttribute("contact", contact);
-//		}
+		if(userByUserName.getId()==contact.getUser().getId()) {
+			model.addAttribute("contact", contact);
+		}
 		
-		model.addAttribute("contact", contact);
+		//model.addAttribute("contact", contact);
 		
 		model.addAttribute("title","Contact");
 		System.out.println("Contact ID: "+c_id);
