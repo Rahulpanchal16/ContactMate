@@ -29,7 +29,7 @@ public class HomeController {
 	@GetMapping(path = "/")
 	public String home(Model model) {
 		model.addAttribute("title", "Home - ContactMate");
-		return "home";
+		return "index";
 	}
 
 	@GetMapping(path = "/about")
