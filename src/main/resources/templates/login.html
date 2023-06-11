@@ -26,24 +26,25 @@
 
 							</div>
 							<div class="mb-3">
-
 								<input type="password" class="form-control"
 									id="exampleInputPassword1" placeholder="Password"
 									name="password">
 							</div>
-							<div class="mb-3 form-check">
-								<input type="checkbox" class="form-check-input"
-									id="exampleCheck1"> <label class="form-check-label"
-									for="exampleCheck1">Remember me</label>
-								<div class="text-end">
-									<a href="" th:href="@{/signup}" style="text-decoration: none">Register
-										here</a>
+							<div class="mb-3 text-end">
+								<div id="emailHelp" class="form-text">
+									<a th:href="@{/forgot}" href="" style="text-decoration: none">Forgot
+										password?</a>
 								</div>
+
 							</div>
 
 							<div class="text-center">
 								<button type="submit" class="btn bg-primary"
 									style="color: white">Login</button>
+							</div>
+							<div class="text-end">
+								New to ContactMate?<a href="" th:href="@{/signup}"
+									style="text-decoration: none"> Sign up</a>
 							</div>
 						</form>
 					</div>

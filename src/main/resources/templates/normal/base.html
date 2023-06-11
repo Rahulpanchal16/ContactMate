@@ -55,17 +55,13 @@
 
 	<!-- Sidebar start -->
 	<div class="sidebar mt-2">
-
 		<span onclick="toggleSidebar()" class="crossBtn">&times;</span>
-		 <a href="#" th:href="@{/user/dashboard}" class="items">
-		  <i class="fa-sharp fa-solid fa-house"></i>Home</a>
-		   <a href="#" th:href="@{/user/show-contacts/0}" class="items">
-		   <i class="fa-solid fa-address-book"></i> View Contacts</a> 
-		   <a href="#" th:href="@{/user/add-contact}" class="items">
-		   <i	class="fa-solid fa-plus"></i> Add Contacts</a>
-		    <a href="#" class="items"><i class="fa-solid fa-user"></i> Profile</a> 
-		    <a href="#" class="items"><i class="fa-solid fa-gear"></i>Settings</a>
-		     <a href="#" th:href="@{/logout}" class="items"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+		<a href="#" th:href="@{/user/dashboard}" class="items"><i class="fa-sharp fa-solid fa-house"></i> Home</a>
+		<a href="#" th:href="@{/user/show-contacts/0}" class="items"><i	class="fa-solid fa-address-book"></i> View Contacts</a>
+		<a href="#" th:href="@{/user/add-contact}" class="items"><i	class="fa-solid fa-plus"></i> Add Contacts</a>
+		<a href="#" th:href="@{/user/profile}" class="items"><i  class="fa-solid fa-user"></i> Profile</a>
+		<a href="#" th:href="@{/user/settings}" class="items"><i class="fa-solid fa-gear"></i>Settings</a>
+		<a href="#" th:href="@{/logout}" class="items"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
 		<div class="divider"></div>
 	</div>
 	<!-- Sidebar end -->
@@ -92,6 +88,26 @@
 		integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
 		crossorigin="anonymous"></script>
 
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+	<script>
+function deleteContact(c_id){
+	swal({
+		  title: "Are you sure?",
+		  text: "Once deleted, you will not be able to recover this contact",
+		  icon: "warning",
+		  buttons: true,
+		  dangerMode: true,
+		})
+		.then((willDelete) => {
+		  if (willDelete) {
+		    window.location="/user/delete/"+c_id;
+		  } else {
+		    swal("Contact not deleted");
+		  }
+		});
+}
+</script>
 
 	<script type="text/javascript" th:src="@{/js/script.js}"></script>
 </body>

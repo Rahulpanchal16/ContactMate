@@ -13,6 +13,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,9 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping(path = "/user")
 public class UserController {
+
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
 	private UserRepo repo;
@@ -129,21 +133,108 @@ public class UserController {
 
 	@GetMapping(path = "/{c_id}/contact")
 	public String showContactDetail(@PathVariable("c_id") Long c_id, Model model, Principal principal) {
-		
+
 		Optional<Contact> contactOptional = this.conRepo.findById(c_id);
 		Contact contact = contactOptional.get();
-		
+
 		String userName = principal.getName();
 		User userByUserName = this.repo.getUserByUserName(userName);
-		
-		if(userByUserName.getId()==contact.getUser().getId()) {
+
+		if (userByUserName.getId() == contact.getUser().getId()) {
 			model.addAttribute("contact", contact);
+			model.addAttribute("title", contact.getName());
 		}
-		
-		//model.addAttribute("contact", contact);
-		
-		model.addAttribute("title","Contact");
-		System.out.println("Contact ID: "+c_id);
+
+		// model.addAttribute("contact", contact);
+
+		model.addAttribute("title", "Contact");
+		System.out.println("Contact ID: " + c_id);
 		return "normal/contact_detail";
+	}
+
+	// Delete contact handler
+	@GetMapping(path = "/delete/{c_id}")
+	public String deleteContact(@PathVariable("c_id") Long id, Model model, Principal principal, HttpSession session) {
+		Optional<Contact> contactById = this.conRepo.findById(id);
+		Contact contact = contactById.get();
+
+		String name = principal.getName();
+		User userByUserName = this.repo.getUserByUserName(name);
+		if (userByUserName.getId() == contact.getUser().getId()) {
+//			contact.setUser(null);
+//			this.conRepo.deleteById(id);
+			User byUserName = this.repo.getUserByUserName(principal.getName());
+			byUserName.getContacts().remove(contact);
+			this.repo.save(byUserName);
+			session.setAttribute("message", new Message("Contact deleted successfully", "success"));
+		}
+
+		return "redirect:/user/show-contacts/0";
+	}
+
+	// Editing the contact handler
+	@PostMapping(path = "/edit-contact/{c_id}")
+	public String editContact(@PathVariable("c_id") Long id, Model model) {
+		model.addAttribute("title", "edit - ContactMate");
+		Contact contact = this.conRepo.findById(id).get();
+		model.addAttribute("contact", contact);
+		return "normal/edit_contact";
+	}
+
+	// processing the new edited contact data
+
+	@PostMapping(path = "/process-edit")
+	public String updateProcess(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file,
+			Model model, HttpSession httpSetssion) {
+
+//		try {
+//			//check the image file
+//			if(!file.isEmpty()) {
+//				
+//			}
+//			
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+
+		System.out.println(contact.getName());
+		long id = contact.getC_id();
+
+		System.out.println("Contact Id: " + id);
+
+		return "";
+	}
+
+	// Your profile section handler
+	@GetMapping(path = "/profile")
+	public String profile(Model model) {
+		model.addAttribute("title", "profile - ContactMate");
+		return "normal/profile";
+	}
+
+	// Open settings handler
+	@GetMapping(path = "/settings")
+	public String openSettings() {
+		return "normal/settings";
+	}
+
+	// change password handler
+	@PostMapping(path = "/change-password")
+	public String changePassword(@RequestParam("oldpass") String oldpass, @RequestParam("newpass") String newpass,
+			Principal principal,HttpSession session) {
+		String user = principal.getName();
+		User userByUserName = this.repo.getUserByUserName(user);
+		String currentUserPassword = userByUserName.getPassword();
+		if (this.bCryptPasswordEncoder.matches(oldpass, currentUserPassword)) {
+			userByUserName.setPassword(this.bCryptPasswordEncoder.encode(newpass));
+			this.repo.save(userByUserName);
+			session.setAttribute("message", new Message("Password changed successfully", "success")); 
+		} else {
+			session.setAttribute("message", new Message("Incorrect password", "danger")); 
+
+		}
+
+		return "/normal/user_dashboard";
 	}
 }

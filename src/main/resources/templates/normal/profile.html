@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{normal/base::layout(~{::section})}">
+<head>
+<meta charset="UTF-8" />
+<title>This is about page</title>
+</head>
+<body>
+	<section>
+		<h1>This is the profile section</h1>
+		<h2>Welcome <span th:text="${user.name}"></span></h2>
+	</section>
+</body>
+</html>

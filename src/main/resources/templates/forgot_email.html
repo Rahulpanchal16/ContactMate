@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="UTF-8" />
+<title>Custom Login Page</title>
+</head>
+<body>
+	<section>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+
+					<div class="my-card mt-3">
+						<h3>Your registered email</h3>
+						<form action="">
+							<div class="form-group">
+								<input type="text" placeholder="Enter your email here"
+									class="form-control" />
+							</div>
+							<div class="container text-center">
+							<button class="btn bg-primary">Send OTP</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+</body>
+</html>

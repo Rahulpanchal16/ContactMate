@@ -10,8 +10,18 @@
 		<div class="card" style="margin-right: 25px; margin-left: 10px">
 			<div class="card-body">
 				<h1 class="text-center">Your Contacts</h1>
-
-				<table class="table">
+				<!-- Search bar starts here -->
+				<div class="search-container">
+					<input onkeyup="search()" id="search-input" class="form-control me-2"
+					type="text" placeholder="Search" aria-label="Search">
+					<div class="search-result">
+					<!-- search result goes here -->
+					<h3>this is the result</h3>
+					</div>
+				</div>
+				<!-- Search bar ends here -->
+				<div class="table-responsive">
+				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th scope="col">Id</th>
@@ -25,33 +35,41 @@
 					<tbody>
 						<tr th:each="c: ${contacts}">
 							<th scope="row" th:text="${c.c_id}">1</th>
-							<td > 
-							<img src="" class="my_profile_pic" th:src="@{'/img/'+${c.image}}" alt="profile photo" />
-							 <span  th:text="${c.c_name}"></span></td>
+							<td><img src="" class="my_profile_pic"
+								th:src="@{'/img/'+${c.image}}" alt="profile photo" /> <span
+								th:text="${c.name}"></span></td>
 							<td th:text="${c.secondName}">Otto</td>
 							<td th:text="${'+91 '+c.phone}">@mdo</td>
+							<td><a href="" th:href="@{'/user/'+${c.c_id }+'/contact'}">
+									<span th:text="${c.email}"></span>
+							</a></td>
 							<td>
-							<a href="" th:href="@{'/user/'+${c.c_id }+'/contact'}">
-							<span th:text="${c.email}"></span>
-							</a>
+								<form th:action="@{'/user/edit-contact/'+${c.c_id}}" method="post">
+									<button type="submit" class="btn btn-primary btn-sm">Edit</button>
+								</form>
+								 <a th:attr="onclick=|deleteContact('${c.c_id}')|" href="#">
+								 <i	class="fa-solid fa-trash"></i></a>
 							</td>
-							<td><a href=""><i class="fa-regular fa-pen-to-square"></i></a>
-								<a href=""><i class="fa-solid fa-trash"></i></a></td>
+
 						</tr>
 					</tbody>
 				</table>
+				</div>
 				<!-- Pagination part -->
 				<nav aria-label="Page navigation example">
 					<ul class="pagination">
-						<li th:if="${currentPage !=0}" class="page-item">
-						<a th:href="@{'/user/show-contacts/'+${currentPage-1}}" class="page-link" href="#">Previous</a></li>
+						<li th:if="${currentPage !=0}" class="page-item"><a
+							th:href="@{'/user/show-contacts/'+${currentPage-1}}"
+							class="page-link" href="#">Previous</a></li>
 						<li th:classappend="${currentPage==i-1?'active':''}"
 							th:each="i:${#numbers.sequence(1,totalPages)}" class="page-item">
-							<a th:href="@{'/user/show-contacts/'+${i-1}}" class="page-link"	href="#">
-							<span th:text="${i}"></span></a>
+							<a th:href="@{'/user/show-contacts/'+${i-1}}" class="page-link"
+							href="#"> <span th:text="${i}"></span></a>
 						</li>
 						<li th:if="${currentPage+1 != totalPages}" class="page-item">
-						<a th:href="@{'/user/show-contacts/'+${currentPage+1}}" class="page-link" href="#">Next</a></li>
+							<a th:href="@{'/user/show-contacts/'+${currentPage+1}}"
+							class="page-link" href="#">Next</a>
+						</li>
 					</ul>
 				</nav>
 			</div>

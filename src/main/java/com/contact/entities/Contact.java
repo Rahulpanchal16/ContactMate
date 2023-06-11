@@ -1,5 +1,7 @@
 package com.contact.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +19,7 @@ public class Contact {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long c_id;
 	@NotBlank(message = "Name cannot be blank")
-	private String c_name;
+	private String name;
 	private String secondName;
 	private String work;
 	@Email(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "Invalid email")
@@ -29,24 +31,12 @@ public class Contact {
 	private String description;
 
 	@ManyToOne
+	@JsonIgnore
 	private User user;
 
 	public Contact() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-
-	public Contact(long c_id, String c_name, String secondName, String work, String email, String phone, String image,
-			String description) {
-		super();
-		this.c_id = c_id;
-		this.c_name = c_name;
-		this.secondName = secondName;
-		this.work = work;
-		this.email = email;
-		this.phone = phone;
-		this.image = image;
-		this.description = description;
 	}
 
 	public long getC_id() {
@@ -57,12 +47,12 @@ public class Contact {
 		this.c_id = c_id;
 	}
 
-	public String getC_name() {
-		return c_name;
+	public String getName() {
+		return name;
 	}
 
-	public void setC_name(String c_name) {
-		this.c_name = c_name;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getSecondName() {
@@ -121,12 +111,34 @@ public class Contact {
 		this.user = user;
 	}
 
+	public Contact(long c_id, @NotBlank(message = "Name cannot be blank") String name, String secondName, String work,
+			@Email(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "Invalid email") String email,
+			@NotBlank(message = "Contact number cannot be blank") String phone, String image, String description,
+			User user) {
+		super();
+		this.c_id = c_id;
+		this.name = name;
+		this.secondName = secondName;
+		this.work = work;
+		this.email = email;
+		this.phone = phone;
+		this.image = image;
+		this.description = description;
+		this.user = user;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return this.c_id == ((Contact) obj).getC_id();
+	}
+
 	/*
 	 * @Override public String toString() { return "Contact [c_id=" + c_id +
 	 * ", c_name=" + c_name + ", secondName=" + secondName + ", work=" + work +
 	 * ", email=" + email + ", phone=" + phone + ", image=" + image +
 	 * ", description=" + description + ", user=" + user + "]"; }
 	 * 
-	 */	
+	 */
 
 }
