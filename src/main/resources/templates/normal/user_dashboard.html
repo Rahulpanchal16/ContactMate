@@ -10,6 +10,16 @@
 		<h1>This is the private user page</h1>
 		<h2>Here we have to write about the contact manager software</h2>
 		<h2>User name: <span th:text="${user.name}"></span></h2>
+		
+		<hr />
+		
+		<h2 class="my-2">Donate us!</h2>
+		<input type="text" name="" class="form-control my-2" placeholder="Enter amount here" id="payment_field" />
+		
+		<div class="container text-center">
+		<button onclick="paymentStart()" class="btn btn-success">Pay</button>
+		</div>
+		
 	</section>
 </body>
 </html>

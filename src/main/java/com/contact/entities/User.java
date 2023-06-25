@@ -1,5 +1,6 @@
 package com.contact.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "User")
-public class User {
+public class User implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

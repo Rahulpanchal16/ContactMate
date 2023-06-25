@@ -6,8 +6,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.Map;
 import java.util.Optional;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
@@ -20,8 +22,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.contact.dao.ContactRepo;
@@ -29,6 +33,9 @@ import com.contact.dao.UserRepo;
 import com.contact.entities.Contact;
 import com.contact.entities.User;
 import com.contact.helper.Message;
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -45,6 +52,28 @@ public class UserController {
 
 	@Autowired
 	private ContactRepo conRepo;
+
+	// PAYMENT --- CREATING ORDER
+
+	@PostMapping(path = "/create_order")
+	@ResponseBody
+	public String order(@RequestBody Map<String, Object> data) throws RazorpayException {
+		// System.out.println("order function executed");
+		System.out.println(data);
+		int amount = Integer.parseInt(data.get("amount").toString());
+		RazorpayClient razorpay= new RazorpayClient("rzp_test_Alg9ssRXZSbXhA", "uD56ofsiFP3fErkKPeiXaHuE");
+
+		JSONObject jsonObject=new JSONObject();
+		jsonObject.put("amount", amount*100);
+		jsonObject.put("currency", "INR");
+		jsonObject.put("receipt", "txn_1234");
+		
+		//creating new order
+		Order order = razorpay.orders.create(jsonObject);
+		System.out.println(order);
+
+		return order.toString();
+	}
 
 	// Method to add common data to all the handlers
 	@ModelAttribute
@@ -222,16 +251,16 @@ public class UserController {
 	// change password handler
 	@PostMapping(path = "/change-password")
 	public String changePassword(@RequestParam("oldpass") String oldpass, @RequestParam("newpass") String newpass,
-			Principal principal,HttpSession session) {
+			Principal principal, HttpSession session) {
 		String user = principal.getName();
 		User userByUserName = this.repo.getUserByUserName(user);
 		String currentUserPassword = userByUserName.getPassword();
 		if (this.bCryptPasswordEncoder.matches(oldpass, currentUserPassword)) {
 			userByUserName.setPassword(this.bCryptPasswordEncoder.encode(newpass));
 			this.repo.save(userByUserName);
-			session.setAttribute("message", new Message("Password changed successfully", "success")); 
+			session.setAttribute("message", new Message("Password changed successfully", "success"));
 		} else {
-			session.setAttribute("message", new Message("Incorrect password", "danger")); 
+			session.setAttribute("message", new Message("Incorrect password", "danger"));
 
 		}
 
